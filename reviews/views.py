@@ -63,6 +63,21 @@ class RegisterView(generics.CreateAPIView):
 	permission_classes = [permissions.AllowAny]
 
 class ReviewViewSet(viewsets.ModelViewSet):
+	@action(detail=False, methods=['get'], url_path='recommendations')
+	def recommendations(self, request):
+		if not request.user.is_authenticated:
+			return Response({'detail': 'Authentication required.'}, status=status.HTTP_401_UNAUTHORIZED)
+		# Step 1: Get movies the user rated 4 or 5
+		user_high_rated = Review.objects.filter(user=request.user, rating__gte=4)
+		high_rated_titles = user_high_rated.values_list('movie_title', flat=True)
+		# Step 2: Find other users who also rated these movies highly
+		similar_reviews = Review.objects.filter(movie_title__in=high_rated_titles, rating__gte=4).exclude(user=request.user)
+		similar_users = similar_reviews.values_list('user', flat=True).distinct()
+		# Step 3: Find other movies these users rated highly, excluding movies the current user has already reviewed
+		recommended_reviews = Review.objects.filter(user__in=similar_users, rating__gte=4).exclude(movie_title__in=high_rated_titles)
+		recommended_titles = recommended_reviews.values_list('movie_title', flat=True).distinct()
+		# Step 4: Return a list of recommended movie titles
+		return Response({'recommended_movies': list(recommended_titles)})
 	queryset = Review.objects.all()
 	serializer_class = ReviewSerializer
 	filter_backends = [filters.SearchFilter, filters.OrderingFilter]
