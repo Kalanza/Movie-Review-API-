@@ -123,6 +123,9 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+# OMDB API Key (set your key here or via environment variable)
+OMDB_API_KEY = "YOUR_OMDB_API_KEY"
+
 # Django REST Framework settings
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
