@@ -147,3 +147,5 @@ REST_FRAMEWORK = {
         'user': '1000/hour',
     },
 }
+
+STATIC_ROOT = BASE_DIR / "static"
