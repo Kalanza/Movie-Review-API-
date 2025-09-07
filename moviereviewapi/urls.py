@@ -18,6 +18,7 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path, include, re_path
+from django.http import JsonResponse
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
@@ -26,6 +27,25 @@ from rest_framework_simplejwt.views import (
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
+
+def api_root(request):
+    """Root API endpoint with available endpoints"""
+    return JsonResponse({
+        'message': 'Welcome to Movie Review API',
+        'version': 'v1',
+        'endpoints': {
+            'admin': '/admin/',
+            'api': '/api/',
+            'authentication': {
+                'token': '/api/token/',
+                'refresh': '/api/token/refresh/',
+            },
+            'documentation': {
+                'swagger': '/swagger/',
+                'redoc': '/redoc/',
+            }
+        }
+    })
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -38,6 +58,7 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
+    path('', api_root, name='api-root'),  # Root URL
     path("admin/", admin.site.urls),
     path("api/", include("reviews.urls")),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
