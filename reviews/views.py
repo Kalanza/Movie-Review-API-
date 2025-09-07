@@ -9,23 +9,24 @@ from rest_framework import status
 from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.pagination import PageNumberPagination
 
-	queryset = User.objects.all()
-	serializer_class = UserSerializer
-	permission_classes = [permissions.AllowAny]
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [permissions.AllowAny]
 
-	@action(detail=True, methods=['get'])
-	def profile(self, request, pk=None):
-		user = self.get_object()
-		profile, created = UserProfile.objects.get_or_create(user=user)
-		serializer = UserProfileSerializer(profile)
-		return Response(serializer.data)
+    @action(detail=True, methods=['get'])
+    def profile(self, request, pk=None):
+        user = self.get_object()
+        profile, created = UserProfile.objects.get_or_create(user=user)
+        serializer = UserProfileSerializer(profile)
+        return Response(serializer.data)
 
-	@action(detail=True, methods=['get'])
-	def reviews(self, request, pk=None):
-		user = self.get_object()
-		reviews = user.reviews.all()
-		serializer = ReviewSerializer(reviews, many=True)
-		return Response(serializer.data)
+    @action(detail=True, methods=['get'])
+    def reviews(self, request, pk=None):
+        user = self.get_object()
+        reviews = user.reviews.all()
+        serializer = ReviewSerializer(reviews, many=True)
+        return Response(serializer.data)
 class UserProfileViewSet(viewsets.ModelViewSet):
 	queryset = UserProfile.objects.all()
 	serializer_class = UserProfileSerializer
