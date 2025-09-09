@@ -72,7 +72,7 @@ class ReviewViewSet(viewsets.ModelViewSet):
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['movie_title', 'rating']
     ordering_fields = ['rating', 'created_date']
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.AllowAny]  # Allow anonymous users
 
     def get_queryset(self):
         queryset = Review.objects.all()
@@ -85,7 +85,12 @@ class ReviewViewSet(viewsets.ModelViewSet):
         return queryset
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        # Save with user if authenticated, otherwise save without user
+        if self.request.user.is_authenticated:
+            serializer.save(user=self.request.user)
+        else:
+            # For anonymous users, we need to handle the user field
+            serializer.save()
 
     def update(self, request, *args, **kwargs):
         instance = self.get_object()

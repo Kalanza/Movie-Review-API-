@@ -1,4 +1,5 @@
 {% extends 'reviews/base.html' %}
+{% load static %}
 
 {% block title %}Search Movies - Movie Review API{% endblock %}
 
@@ -152,28 +153,62 @@ $(document).ready(function() {
     $('#submitReview').click(function() {
         const formData = {
             movie_title: $('#movieTitle').val(),
-            imdb_id: $('#movieImdbId').val(),
-            rating: $('#rating').val(),
-            comment: $('#comment').val()
+            review_content: $('#comment').val(), // Changed from 'comment' to 'review_content'
+            rating: parseInt($('#rating').val()) // Ensure rating is an integer
         };
         
-        if (!formData.rating || !formData.comment) {
+        if (!formData.rating || !formData.review_content) {
             alert('Please fill in all fields');
             return;
+        }
+        
+        console.log('Submitting review data:', formData); // Debug log
+        
+        // Get CSRF token
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
         }
         
         $.ajax({
             url: '/api/reviews/',
             method: 'POST',
             contentType: 'application/json',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken')
+            },
             data: JSON.stringify(formData),
-            success: function() {
+            success: function(response) {
+                console.log('Success:', response);
                 $('#reviewModal').modal('hide');
                 $('#reviewForm')[0].reset();
                 alert('Review submitted successfully!');
             },
-            error: function() {
-                alert('Error submitting review. Please try again.');
+            error: function(xhr, status, error) {
+                console.error('Error details:', xhr.responseText);
+                console.error('Status:', status);
+                console.error('Error:', error);
+                
+                let errorMessage = 'Error submitting review. Please try again.';
+                if (xhr.responseText) {
+                    try {
+                        const errorData = JSON.parse(xhr.responseText);
+                        errorMessage = 'Error: ' + (errorData.detail || errorData.message || JSON.stringify(errorData));
+                    } catch (e) {
+                        errorMessage = 'Error: ' + xhr.responseText;
+                    }
+                }
+                alert(errorMessage);
             }
         });
     });
