@@ -151,18 +151,23 @@ $(document).ready(function() {
     
     // Submit review
     $('#submitReview').click(function() {
+        console.log('Submit button clicked!'); // Debug log
+        
         const formData = {
             movie_title: $('#movieTitle').val(),
-            review_content: $('#comment').val(), // Changed from 'comment' to 'review_content'
-            rating: parseInt($('#rating').val()) // Ensure rating is an integer
+            review_content: $('#comment').val(),
+            rating: parseInt($('#rating').val())
         };
+        
+        console.log('Form data collected:', formData); // Debug log
+        console.log('Movie title:', formData.movie_title);
+        console.log('Review content:', formData.review_content);
+        console.log('Rating:', formData.rating);
         
         if (!formData.rating || !formData.review_content) {
             alert('Please fill in all fields');
             return;
         }
-        
-        console.log('Submitting review data:', formData); // Debug log
         
         // Get CSRF token
         function getCookie(name) {
@@ -180,35 +185,67 @@ $(document).ready(function() {
             return cookieValue;
         }
         
+        const csrfToken = getCookie('csrftoken');
+        console.log('CSRF Token:', csrfToken); // Debug log
+        
+        // Show loading state
+        const submitBtn = $('#submitReview');
+        const originalText = submitBtn.text();
+        submitBtn.text('Submitting...').prop('disabled', true);
+        
         $.ajax({
             url: '/api/reviews/',
             method: 'POST',
             contentType: 'application/json',
             headers: {
-                'X-CSRFToken': getCookie('csrftoken')
+                'X-CSRFToken': csrfToken
             },
             data: JSON.stringify(formData),
+            beforeSend: function(xhr) {
+                console.log('About to send request to:', '/api/reviews/');
+                console.log('Request headers:', xhr.getAllResponseHeaders());
+                console.log('Request data:', JSON.stringify(formData));
+            },
             success: function(response) {
-                console.log('Success:', response);
+                console.log('SUCCESS! Response:', response);
+                submitBtn.text(originalText).prop('disabled', false);
                 $('#reviewModal').modal('hide');
                 $('#reviewForm')[0].reset();
                 alert('Review submitted successfully!');
+                // Optionally refresh the page or update the UI
+                location.reload();
             },
             error: function(xhr, status, error) {
-                console.error('Error details:', xhr.responseText);
+                console.error('AJAX ERROR occurred:');
                 console.error('Status:', status);
                 console.error('Error:', error);
+                console.error('Response Status:', xhr.status);
+                console.error('Response Text:', xhr.responseText);
+                console.error('Ready State:', xhr.readyState);
+                
+                submitBtn.text(originalText).prop('disabled', false);
                 
                 let errorMessage = 'Error submitting review. Please try again.';
+                
                 if (xhr.responseText) {
                     try {
                         const errorData = JSON.parse(xhr.responseText);
-                        errorMessage = 'Error: ' + (errorData.detail || errorData.message || JSON.stringify(errorData));
+                        console.error('Parsed error data:', errorData);
+                        
+                        if (errorData.detail) {
+                            errorMessage = errorData.detail;
+                        } else if (errorData.message) {
+                            errorMessage = errorData.message;
+                        } else if (typeof errorData === 'object') {
+                            errorMessage = JSON.stringify(errorData);
+                        }
                     } catch (e) {
-                        errorMessage = 'Error: ' + xhr.responseText;
+                        console.error('Could not parse error response as JSON');
+                        errorMessage = xhr.responseText;
                     }
                 }
-                alert(errorMessage);
+                
+                alert('Detailed Error: ' + errorMessage);
             }
         });
     });
