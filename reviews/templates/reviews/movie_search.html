@@ -43,6 +43,7 @@
             </div>
             <div class="modal-body">
                 <form id="reviewForm">
+                    {% csrf_token %}
                     <input type="hidden" id="movieTitle" name="movie_title">
                     <input type="hidden" id="movieImdbId" name="imdb_id">
                     
@@ -59,8 +60,8 @@
                     </div>
                     
                     <div class="mb-3">
-                        <label for="comment" class="form-label">Review</label>
-                        <textarea class="form-control" id="comment" name="comment" rows="4" placeholder="Write your review here..." required></textarea>
+                        <label for="reviewContent" class="form-label">Review</label>
+                        <textarea class="form-control" id="reviewContent" name="review_content" rows="4" placeholder="Write your review here..." required></textarea>
                     </div>
                 </form>
             </div>
@@ -155,7 +156,7 @@ $(document).ready(function() {
         
         const formData = {
             movie_title: $('#movieTitle').val(),
-            review_content: $('#comment').val(),
+            review_content: $('#reviewContent').val(),
             rating: parseInt($('#rating').val())
         };
         
@@ -185,7 +186,7 @@ $(document).ready(function() {
             return cookieValue;
         }
         
-        const csrfToken = getCookie('csrftoken');
+        const csrfToken = getCookie('csrftoken') || $('meta[name=csrf-token]').attr('content');
         console.log('CSRF Token:', csrfToken); // Debug log
         
         // Show loading state

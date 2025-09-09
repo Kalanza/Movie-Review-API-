@@ -130,7 +130,7 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # OMDB API Key (set your key here or via environment variable)
-OMDB_API_KEY = "YOUR_OMDB_API_KEY"
+OMDB_API_KEY = os.environ.get('OMDB_API_KEY', '2edc958b')  # Using a demo key
 
 # Django REST Framework settings
 REST_FRAMEWORK = {

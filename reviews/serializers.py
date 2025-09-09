@@ -44,3 +44,10 @@ class ReviewSerializer(serializers.ModelSerializer):
 
     def get_likes_count(self, obj):
         return obj.likes.count()
+
+    def create(self, validated_data):
+        # Handle creation for both authenticated and anonymous users
+        request = self.context.get('request')
+        if request and request.user.is_authenticated:
+            validated_data['user'] = request.user
+        return super().create(validated_data)
