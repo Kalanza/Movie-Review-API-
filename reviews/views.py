@@ -8,6 +8,9 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.pagination import PageNumberPagination
+from django.shortcuts import render
+from django.views.generic import ListView
+from django.http import JsonResponse
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
@@ -195,4 +198,43 @@ def movie_info_view(request):
         return Response(movie_info, status=status.HTTP_200_OK)
     else:
         return Response({'error': 'Movie not found'}, 
+                       status=status.HTTP_404_NOT_FOUND)
+
+# Template Views for Web Interface
+def home_view(request):
+    """Home page with recent reviews"""
+    recent_reviews = Review.objects.order_by('-created_date')[:6]
+    return render(request, 'reviews/home.html', {
+        'recent_reviews': recent_reviews
+    })
+
+def movie_search_view(request):
+    """Movie search page"""
+    return render(request, 'reviews/movie_search.html')
+
+class ReviewsListView(ListView):
+    """Reviews list page with pagination"""
+    model = Review
+    template_name = 'reviews/reviews_list.html'
+    context_object_name = 'reviews'
+    paginate_by = 12
+    ordering = ['-created_date']
+
+# API endpoint for the frontend search (without authentication)
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def search_movies_public(request):
+    """
+    Public search endpoint for the web interface
+    """
+    query = request.GET.get('search', '')
+    if not query:
+        return Response({'error': 'Search parameter is required'}, 
+                       status=status.HTTP_400_BAD_REQUEST)
+    
+    movies = search_movies(query)
+    if movies is not None:
+        return Response(movies, status=status.HTTP_200_OK)
+    else:
+        return Response({'error': 'No movies found or API error'}, 
                        status=status.HTTP_404_NOT_FOUND)

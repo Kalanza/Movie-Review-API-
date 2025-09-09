@@ -1,0 +1,88 @@
+{% extends 'reviews/base.html' %}
+
+{% block title %}Home - Movie Review API{% endblock %}
+
+{% block content %}
+<div class="hero-section">
+    <div class="container text-center">
+        <h1 class="display-4 mb-4">
+            <i class="fas fa-star"></i> Movie Review API
+        </h1>
+        <p class="lead">Discover, Review, and Rate Your Favorite Movies</p>
+        <div class="mt-4">
+            <a href="{% url 'movie_search' %}" class="btn btn-light btn-lg me-3">
+                <i class="fas fa-search"></i> Search Movies
+            </a>
+            <a href="{% url 'reviews_list' %}" class="btn btn-outline-light btn-lg">
+                <i class="fas fa-list"></i> View Reviews
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 text-center">
+                <div class="card-body">
+                    <i class="fas fa-search fa-3x text-primary mb-3"></i>
+                    <h5 class="card-title">Search Movies</h5>
+                    <p class="card-text">Find movies using our OMDB integration. Get detailed information about any movie.</p>
+                    <a href="{% url 'movie_search' %}" class="btn btn-primary">Start Searching</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 text-center">
+                <div class="card-body">
+                    <i class="fas fa-star fa-3x text-warning mb-3"></i>
+                    <h5 class="card-title">Write Reviews</h5>
+                    <p class="card-text">Share your thoughts and rate movies. Help others discover great films.</p>
+                    <a href="{% url 'reviews_list' %}" class="btn btn-warning">View Reviews</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 text-center">
+                <div class="card-body">
+                    <i class="fas fa-code fa-3x text-success mb-3"></i>
+                    <h5 class="card-title">API Access</h5>
+                    <p class="card-text">Use our RESTful API for your applications. Full documentation available.</p>
+                    <a href="/swagger/" target="_blank" class="btn btn-success">API Docs</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if recent_reviews %}
+    <div class="row mt-5">
+        <div class="col-12">
+            <h3 class="mb-4">Recent Reviews</h3>
+            <div class="row">
+                {% for review in recent_reviews %}
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card movie-card h-100">
+                        <div class="card-body">
+                            <h6 class="card-title">{{ review.movie_title }}</h6>
+                            <div class="rating-stars mb-2">
+                                {% for i in "12345"|make_list %}
+                                    {% if forloop.counter <= review.rating %}
+                                        <i class="fas fa-star"></i>
+                                    {% else %}
+                                        <i class="far fa-star"></i>
+                                    {% endif %}
+                                {% endfor %}
+                                <span class="ms-2 text-muted">{{ review.rating }}/5</span>
+                            </div>
+                            <p class="card-text">{{ review.comment|truncatewords:15 }}</p>
+                            <small class="text-muted">{{ review.created_at|date:"M d, Y" }}</small>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

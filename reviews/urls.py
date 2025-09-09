@@ -3,7 +3,8 @@ from rest_framework.routers import DefaultRouter
 from .views import (
     UserViewSet, ReviewViewSet, RegisterView, UserProfileViewSet, 
     ReviewLikeViewSet, ReviewCommentViewSet, search_movies_view, 
-    movie_details_view, movie_info_view
+    movie_details_view, movie_info_view, home_view, movie_search_view,
+    ReviewsListView, search_movies_public
 )
 
 router = DefaultRouter()
@@ -14,9 +15,16 @@ router.register(r'likes', ReviewLikeViewSet, basename='like')
 router.register(r'comments', ReviewCommentViewSet, basename='comment')
 
 urlpatterns = [
-    path('register/', RegisterView.as_view(), name='register'),
-    path('search-movies/', search_movies_view, name='search-movies'),
-    path('movie-details/<str:imdb_id>/', movie_details_view, name='movie-details'),
-    path('movie-info/', movie_info_view, name='movie-info'),
-    path('', include(router.urls)),
+    # Web Interface URLs
+    path('', home_view, name='home'),
+    path('search/', movie_search_view, name='movie_search'),
+    path('reviews/', ReviewsListView.as_view(), name='reviews_list'),
+    
+    # API URLs
+    path('api/register/', RegisterView.as_view(), name='register'),
+    path('api/search-movies/', search_movies_public, name='search-movies-public'),
+    path('api/search-movies-auth/', search_movies_view, name='search-movies'),
+    path('api/movie-details/<str:imdb_id>/', movie_details_view, name='movie-details'),
+    path('api/movie-info/', movie_info_view, name='movie-info'),
+    path('api/', include(router.urls)),
 ]
