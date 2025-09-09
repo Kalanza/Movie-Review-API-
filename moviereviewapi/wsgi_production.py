@@ -10,7 +10,9 @@ path = '/home/Kalanzaa/Movie-Review-API-'
 if path not in sys.path:
     sys.path.insert(0, path)
 
+# Set environment variables
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'moviereviewapi.production_settings')
+os.environ.setdefault('OMDB_API_KEY', 'eb694b1d')
 
 from django.core.wsgi import get_wsgi_application
 application = get_wsgi_application()
