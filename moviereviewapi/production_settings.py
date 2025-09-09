@@ -8,7 +8,7 @@ import os
 DEBUG = False
 
 # Update allowed hosts for PythonAnywhere
-ALLOWED_HOSTS = ['kalanzaa.pythonanywhere.com', 'www.kalanzaa.pythonanywhere.com']
+ALLOWED_HOSTS = ['kalanza.pythonanywhere.com', 'www.kalanza.pythonanywhere.com']
 
 # Security settings for production
 SECURE_BROWSER_XSS_FILTER = True
@@ -17,13 +17,13 @@ X_FRAME_OPTIONS = 'DENY'
 
 # Static files configuration for PythonAnywhere
 STATIC_URL = '/static/'
-STATIC_ROOT = '/home/kalanzaa/Movie-Review-API-/static'
+STATIC_ROOT = '/home/Kalanza/Movie-Review-API-/static'
 
 # Database configuration (SQLite is fine for small projects)
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': '/home/kalanzaa/Movie-Review-API-/db.sqlite3',
+        'NAME': '/home/Kalanza/Movie-Review-API-/db.sqlite3',
     }
 }
 
