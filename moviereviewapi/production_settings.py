@@ -8,7 +8,7 @@ import os
 DEBUG = False
 
 # Update allowed hosts for PythonAnywhere
-ALLOWED_HOSTS = ['kalanza.pythonanywhere.com', 'www.kalanza.pythonanywhere.com']
+ALLOWED_HOSTS = ['Kalanzaa.pythonanywhere.com', 'www.Kalanzaa.pythonanywhere.com']
 
 # Security settings for production
 SECURE_BROWSER_XSS_FILTER = True
@@ -17,11 +17,11 @@ X_FRAME_OPTIONS = 'DENY'
 
 # Static files configuration for PythonAnywhere
 STATIC_URL = '/static/'
-STATIC_ROOT = '/home/kalanza/Movie-Review-API-/static'
+STATIC_ROOT = '/home/Kalanzaa/Movie-Review-API-/static'
 
 # Media files configuration
 MEDIA_URL = '/media/'
-MEDIA_ROOT = '/home/kalanza/Movie-Review-API-/media'
+MEDIA_ROOT = '/home/Kalanzaa/Movie-Review-API-/media'
 
 # Database configuration (SQLite is fine for small projects)
 DATABASES = {

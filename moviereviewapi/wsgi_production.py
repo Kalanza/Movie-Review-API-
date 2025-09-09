@@ -6,7 +6,7 @@ import os
 import sys
 
 # Add your project directory to sys.path
-path = '/home/kalanza/Movie-Review-API-'
+path = '/home/Kalanzaa/Movie-Review-API-'
 if path not in sys.path:
     sys.path.insert(0, path)
 
