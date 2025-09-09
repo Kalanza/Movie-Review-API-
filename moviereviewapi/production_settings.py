@@ -27,7 +27,7 @@ MEDIA_ROOT = '/home/kalanza/Movie-Review-API-/media'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': '/home/kalanza/Movie-Review-API-/db.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 

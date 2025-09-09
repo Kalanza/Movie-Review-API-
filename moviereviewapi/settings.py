@@ -26,7 +26,7 @@ SECRET_KEY = "django-insecure-!vm4=%#ukw=(p#ttxlrm-+(x1sx2n5izw4*84^0qyqp-2=ur$=
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
 
-ALLOWED_HOSTS = ['kalanzaa.pythonanywhere.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['kalanza.pythonanywhere.com', 'localhost', '127.0.0.1']
 
 
 # Application definition
