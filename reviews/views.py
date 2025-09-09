@@ -1,4 +1,4 @@
-from .omdb_utils import fetch_movie_info
+from .omdb_utils import fetch_movie_info, search_movies, fetch_movie_by_imdb_id
 from rest_framework import viewsets, permissions, filters, generics
 from django.contrib.auth.models import User
 from .models import Review, UserProfile, ReviewLike, ReviewComment
@@ -143,3 +143,56 @@ class ReviewViewSet(viewsets.ModelViewSet):
         page = paginator.paginate_queryset(queryset, request)
         serializer = self.get_serializer(page, many=True)
         return paginator.get_paginated_response(serializer.data)
+
+# OMDB API endpoints
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def search_movies_view(request):
+    """
+    Search for movies using OMDB API
+    Example: /api/search-movies/?q=inception
+    """
+    query = request.GET.get('q', '')
+    if not query:
+        return Response({'error': 'Query parameter q is required'}, 
+                       status=status.HTTP_400_BAD_REQUEST)
+    
+    movies = search_movies(query)
+    if movies is not None:
+        return Response({'movies': movies}, status=status.HTTP_200_OK)
+    else:
+        return Response({'error': 'No movies found or API error'}, 
+                       status=status.HTTP_404_NOT_FOUND)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def movie_details_view(request, imdb_id):
+    """
+    Get detailed movie information by IMDB ID
+    Example: /api/movie-details/tt3896198/
+    """
+    movie_info = fetch_movie_by_imdb_id(imdb_id)
+    if movie_info:
+        return Response(movie_info, status=status.HTTP_200_OK)
+    else:
+        return Response({'error': 'Movie not found'}, 
+                       status=status.HTTP_404_NOT_FOUND)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def movie_info_view(request):
+    """
+    Get movie information by title
+    Example: /api/movie-info/?title=inception
+    """
+    title = request.GET.get('title', '')
+    if not title:
+        return Response({'error': 'Title parameter is required'}, 
+                       status=status.HTTP_400_BAD_REQUEST)
+    
+    movie_info = fetch_movie_info(title)
+    if movie_info:
+        return Response(movie_info, status=status.HTTP_200_OK)
+    else:
+        return Response({'error': 'Movie not found'}, 
+                       status=status.HTTP_404_NOT_FOUND)

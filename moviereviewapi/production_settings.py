@@ -17,13 +17,17 @@ X_FRAME_OPTIONS = 'DENY'
 
 # Static files configuration for PythonAnywhere
 STATIC_URL = '/static/'
-STATIC_ROOT = '/home/Kalanza/Movie-Review-API-/static'
+STATIC_ROOT = '/home/kalanza/Movie-Review-API-/static'
+
+# Media files configuration
+MEDIA_URL = '/media/'
+MEDIA_ROOT = '/home/kalanza/Movie-Review-API-/media'
 
 # Database configuration (SQLite is fine for small projects)
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': '/home/Kalanza/Movie-Review-API-/db.sqlite3',
+        'NAME': '/home/kalanza/Movie-Review-API-/db.sqlite3',
     }
 }
 
@@ -31,4 +35,4 @@ DATABASES = {
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-!vm4=%#ukw=(p#ttxlrm-+(x1sx2n5izw4*84^0qyqp-2=ur$=')
 
 # OMDB API Key from environment variable
-OMDB_API_KEY = os.environ.get('OMDB_API_KEY', 'YOUR_OMDB_API_KEY')
+OMDB_API_KEY = os.environ.get('OMDB_API_KEY', 'eb694b1d')
