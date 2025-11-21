@@ -100,7 +100,7 @@
                     </div>
 
                     <!-- Edit/Delete Actions for Review Owner -->
-                    {% if user.is_authenticated and review.user == user %}
+                    {% if user.is_authenticated and review.user == user or not review.user %}
                     <div class="review-actions mt-4 pt-3 border-top">
                         <div class="d-flex justify-content-center gap-2">
                             <a href="#" class="btn btn-warning" onclick="editReview({{ review.pk }})">

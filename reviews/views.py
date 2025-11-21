@@ -100,7 +100,10 @@ class ReviewViewSet(viewsets.ModelViewSet):
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
-        if instance.user != request.user:
+        # Allow deletion if:
+        # 1. User is authenticated and owns the review, OR
+        # 2. Review is anonymous (no owner) - allow anyone to delete
+        if instance.user and instance.user != request.user:
             return Response({'detail': 'You do not have permission to delete this review.'}, status=status.HTTP_403_FORBIDDEN)
         return super().destroy(request, *args, **kwargs)
 
