@@ -1,0 +1,32 @@
+# Database
+db.sqlite3
+db.sqlite3-journal
+
+# Static files
+staticfiles/
+static/
+
+# Media files
+media/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+myenv/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
