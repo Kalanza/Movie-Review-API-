@@ -40,6 +40,8 @@ schema_view = get_schema_view(
    ),
    public=True,
    permission_classes=(permissions.AllowAny,),
+   url='https://kalanzaa.pythonanywhere.com/',  # Use CDN for static files
+   urlconf='moviereviewapi.urls',
 )
 
 def test_view(request):
