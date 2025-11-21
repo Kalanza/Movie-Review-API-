@@ -19,6 +19,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include, re_path
 from django.http import JsonResponse
+from django.utils import timezone
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
@@ -56,11 +57,18 @@ schema_view = get_schema_view(
         license=openapi.License(name="MIT License"),
     ),
     public=True,
-    permission_classes=(permissions.AllowAny,),
+    permission_classes=(),
     authentication_classes=(),
 )
 
+def test_view(request):
+    """Simple test view to check if anonymous access works"""
+    return JsonResponse({'message': 'Anonymous access works!', 'timestamp': str(timezone.now())})
+
 urlpatterns = [
+    # Test endpoint
+    path('test/', test_view, name='test'),
+    
     # Web Interface (Home page)
     path('', include('reviews.urls')),  # This will handle both web and API routes
     
@@ -72,7 +80,13 @@ urlpatterns = [
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     
     # API Documentation
-    re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
-    re_path(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-    re_path(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+    re_path(r'^swagger(?P<format>\.json|\.yaml)$', 
+            schema_view.without_ui(cache_timeout=0), 
+            name='schema-json'),
+    re_path(r'^swagger/$', 
+            schema_view.with_ui('swagger', cache_timeout=0), 
+            name='schema-swagger-ui'),
+    re_path(r'^redoc/$', 
+            schema_view.with_ui('redoc', cache_timeout=0), 
+            name='schema-redoc'),
 ]
