@@ -40,8 +40,11 @@ schema_view = get_schema_view(
    ),
    public=True,
    permission_classes=(permissions.AllowAny,),
-   url='https://kalanzaa.pythonanywhere.com/',  # Use CDN for static files
-   urlconf='moviereviewapi.urls',
+   authentication_classes=(),
+   swagger_ui_settings={
+       'url': '',
+       'persistAuthorization': True,
+   },
 )
 
 def test_view(request):
