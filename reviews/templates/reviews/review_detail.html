@@ -33,7 +33,7 @@
                     <div class="review-content mb-4">
                         <h5 class="mb-3"><i class="fas fa-comment"></i> Review</h5>
                         <div class="review-text">
-                            {{ review.comment|linebreaks }}
+                            {{ review.review_content|linebreaks }}
                         </div>
                     </div>
 
@@ -98,6 +98,20 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Edit/Delete Actions for Review Owner -->
+                    {% if user.is_authenticated and review.user == user %}
+                    <div class="review-actions mt-4 pt-3 border-top">
+                        <div class="d-flex justify-content-center gap-2">
+                            <a href="#" class="btn btn-warning" onclick="editReview({{ review.pk }})">
+                                <i class="fas fa-edit"></i> Edit Review
+                            </a>
+                            <button class="btn btn-danger" onclick="deleteReview({{ review.pk }}, '{{ review.movie_title }}')">
+                                <i class="fas fa-trash"></i> Delete Review
+                            </button>
+                        </div>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
 
@@ -113,4 +127,42 @@
         </div>
     </div>
 </div>
+
+<script>
+function editReview(reviewId) {
+    // For now, redirect to search page to edit (could be enhanced later)
+    if (confirm('This will take you to the search page to create a new review. The old review will remain until you delete it manually.')) {
+        window.location.href = '{% url "movie_search" %}';
+    }
+}
+
+function deleteReview(reviewId, movieTitle) {
+    if (confirm(`Are you sure you want to delete your review for "${movieTitle}"? This action cannot be undone.`)) {
+        // Get CSRF token
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+        // Use the API to delete the review
+        fetch(`/api/reviews/${reviewId}/`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                alert('Review deleted successfully!');
+                window.location.href = '{% url "reviews_list" %}';
+            } else {
+                alert('Failed to delete review. Please try again.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while deleting the review.');
+        });
+    }
+}
+</script>
+
 {% endblock %}
