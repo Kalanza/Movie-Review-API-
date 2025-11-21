@@ -8,7 +8,7 @@ import os
 DEBUG = False
 
 # Update allowed hosts for PythonAnywhere
-ALLOWED_HOSTS = ['Kalanzaa.pythonanywhere.com', 'www.Kalanzaa.pythonanywhere.com']
+ALLOWED_HOSTS = ['kalanzaa.pythonanywhere.com', 'www.kalanzaa.pythonanywhere.com']
 
 # Security settings for production
 SECURE_BROWSER_XSS_FILTER = True
