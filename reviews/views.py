@@ -33,7 +33,7 @@ class UserViewSet(viewsets.ModelViewSet):
 class UserProfileViewSet(viewsets.ModelViewSet):
     queryset = UserProfile.objects.all()
     serializer_class = UserProfileSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
 
     def get_queryset(self):
         return UserProfile.objects.filter(user=self.request.user)
@@ -44,7 +44,7 @@ class UserProfileViewSet(viewsets.ModelViewSet):
 class ReviewLikeViewSet(viewsets.ModelViewSet):
     queryset = ReviewLike.objects.all()
     serializer_class = ReviewLikeSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
 
     def get_queryset(self):
         return ReviewLike.objects.filter(user=self.request.user)
@@ -109,8 +109,9 @@ class ReviewViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['get'], url_path='recommendations')
     def recommendations(self, request):
+        # Allow anonymous users, but return empty for non-authenticated
         if not request.user.is_authenticated:
-            return Response({'detail': 'Authentication required.'}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({'detail': 'Login required for recommendations.'}, status=status.HTTP_401_UNAUTHORIZED)
         # Step 1: Get movies the user rated 4 or 5
         user_high_rated = Review.objects.filter(user=request.user, rating__gte=4)
         high_rated_titles = user_high_rated.values_list('movie_title', flat=True)
@@ -157,7 +158,7 @@ class ReviewViewSet(viewsets.ModelViewSet):
 
 # OMDB API endpoints
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 def search_movies_view(request):
     """
     Search for movies using OMDB API
@@ -176,7 +177,7 @@ def search_movies_view(request):
                        status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 def movie_details_view(request, imdb_id):
     """
     Get detailed movie information by IMDB ID
@@ -190,7 +191,7 @@ def movie_details_view(request, imdb_id):
                        status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 def movie_info_view(request):
     """
     Get movie information by title
