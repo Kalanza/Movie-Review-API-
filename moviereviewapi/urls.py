@@ -52,9 +52,12 @@ schema_view = get_schema_view(
         title="Movie Review API",
         default_version='v1',
         description="API documentation for the Movie Review project",
+        contact=openapi.Contact(email="contact@moviereviewapi.com"),
+        license=openapi.License(name="MIT License"),
     ),
     public=True,
     permission_classes=(permissions.AllowAny,),
+    authentication_classes=(),
 )
 
 urlpatterns = [
@@ -70,6 +73,6 @@ urlpatterns = [
     
     # API Documentation
     re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
-    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+    re_path(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    re_path(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]
