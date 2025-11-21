@@ -1,0 +1,68 @@
+{% extends "reviews/base.html" %}
+
+{% block title %}Login - Movie Review API{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="text-center">Login to Movie Review API</h3>
+                </div>
+                <div class="card-body">
+                    {% if form.errors %}
+                        <div class="alert alert-danger">
+                            <strong>Error:</strong> Please correct the errors below.
+                        </div>
+                    {% endif %}
+
+                    <form method="post">
+                        {% csrf_token %}
+
+                        <div class="mb-3">
+                            <label for="{{ form.login.id_for_label }}" class="form-label">Email</label>
+                            {{ form.login }}
+                            {% if form.login.errors %}
+                                <div class="text-danger">{{ form.login.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.password.id_for_label }}" class="form-label">Password</label>
+                            {{ form.password }}
+                            {% if form.password.errors %}
+                                <div class="text-danger">{{ form.password.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3 form-check">
+                            {{ form.remember }}
+                            <label class="form-check-label" for="{{ form.remember.id_for_label }}">
+                                Remember me
+                            </label>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">Login</button>
+                    </form>
+
+                    <hr class="my-4">
+
+                    <!-- Social Login Buttons -->
+                    <div class="text-center">
+                        <p>Or login with:</p>
+                        <a href="{% provider_login_url 'google' %}" class="btn btn-outline-danger btn-lg">
+                            <i class="fab fa-google"></i> Login with Google
+                        </a>
+                    </div>
+
+                    <div class="text-center mt-3">
+                        <p>Don't have an account? <a href="{% url 'account_signup' %}">Sign up</a></p>
+                        <p><a href="{% url 'account_reset_password' %}">Forgot password?</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

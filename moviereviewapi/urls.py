@@ -65,7 +65,10 @@ class PublicSchemaView(get_schema_view(
 )):
     pass
 
-schema_view = PublicSchemaView.as_view()
+# Create instances for different formats
+schema_view_json = PublicSchemaView.as_view()
+schema_view_swagger = PublicSchemaView.as_view()
+schema_view_redoc = PublicSchemaView.as_view()
 
 def test_view(request):
     """Simple test view to check if anonymous access works"""
@@ -74,17 +77,20 @@ def test_view(request):
 urlpatterns = [
     # API Documentation (put these first to avoid conflicts)
     re_path(r'^swagger(?P<format>\.json|\.yaml)$', 
-            schema_view.without_ui(cache_timeout=0), 
+            schema_view_json, 
             name='schema-json'),
     re_path(r'^swagger/$', 
-            schema_view.with_ui('swagger', cache_timeout=0), 
+            schema_view_swagger, 
             name='schema-swagger-ui'),
     re_path(r'^redoc/$', 
-            schema_view.with_ui('redoc', cache_timeout=0), 
+            schema_view_redoc, 
             name='schema-redoc'),
     
     # Test endpoint
     path('test/', test_view, name='test'),
+    
+    # Django Allauth URLs
+    path('accounts/', include('allauth.urls')),
     
     # Web Interface (Home page)
     path('', include('reviews.urls')),  # This will handle both web and API routes
