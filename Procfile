@@ -1,1 +1,1 @@
-web: gunicorn moviereviewapi.wsgi
+web: gunicorn moviereviewapi.wsgi_production
