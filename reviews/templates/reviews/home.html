@@ -75,7 +75,7 @@
                                     {% endfor %}
                                     <span class="ms-2 text-muted">{{ review.rating }}/5</span>
                                 </div>
-                                <p class="card-text">{{ review.comment|truncatewords:15 }}</p>
+                                <p class="card-text">{{ review.review_content|truncatewords:15 }}</p>
                                 <small class="text-muted">{{ review.created_at|date:"M d, Y" }}</small>
                             </div>
                         </div>
