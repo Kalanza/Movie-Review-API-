@@ -61,8 +61,8 @@ urlpatterns = [
     # Web Interface (Home page)
     path('', include('reviews.urls')),  # This will handle both web and API routes
     
-    # Admin
-    path("admin/", admin.site.urls),
+    # Admin Panel (improved URL for better security)
+    path("dashboard/", admin.site.urls),
     
     # JWT Authentication
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
