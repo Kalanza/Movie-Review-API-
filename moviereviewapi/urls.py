@@ -48,24 +48,41 @@ def api_root(request):
         }
     })
 
-schema_view = get_schema_view(
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+
+# Create a custom schema view that bypasses all authentication
+@method_decorator(csrf_exempt, name='dispatch')
+class PublicSchemaView(get_schema_view(
     openapi.Info(
         title="Movie Review API",
         default_version='v1',
         description="API documentation for the Movie Review project",
-        contact=openapi.Contact(email="contact@moviereviewapi.com"),
-        license=openapi.License(name="MIT License"),
     ),
     public=True,
     permission_classes=(),
     authentication_classes=(),
-)
+)):
+    pass
+
+schema_view = PublicSchemaView.as_view()
 
 def test_view(request):
     """Simple test view to check if anonymous access works"""
     return JsonResponse({'message': 'Anonymous access works!', 'timestamp': str(timezone.now())})
 
 urlpatterns = [
+    # API Documentation (put these first to avoid conflicts)
+    re_path(r'^swagger(?P<format>\.json|\.yaml)$', 
+            schema_view.without_ui(cache_timeout=0), 
+            name='schema-json'),
+    re_path(r'^swagger/$', 
+            schema_view.with_ui('swagger', cache_timeout=0), 
+            name='schema-swagger-ui'),
+    re_path(r'^redoc/$', 
+            schema_view.with_ui('redoc', cache_timeout=0), 
+            name='schema-redoc'),
+    
     # Test endpoint
     path('test/', test_view, name='test'),
     
@@ -78,15 +95,4 @@ urlpatterns = [
     # JWT Authentication
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    
-    # API Documentation
-    re_path(r'^swagger(?P<format>\.json|\.yaml)$', 
-            schema_view.without_ui(cache_timeout=0), 
-            name='schema-json'),
-    re_path(r'^swagger/$', 
-            schema_view.with_ui('swagger', cache_timeout=0), 
-            name='schema-swagger-ui'),
-    re_path(r'^redoc/$', 
-            schema_view.with_ui('redoc', cache_timeout=0), 
-            name='schema-redoc'),
 ]
