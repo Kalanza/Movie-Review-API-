@@ -1,0 +1,116 @@
+{% extends 'reviews/base.html' %}
+
+{% block title %}{{ review.movie_title }} - Review{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <!-- Back Button -->
+            <a href="{% url 'reviews_list' %}" class="btn btn-outline-secondary mb-4">
+                <i class="fas fa-arrow-left"></i> Back to Reviews
+            </a>
+
+            <!-- Review Card -->
+            <div class="card movie-card animate-fade-in">
+                <div class="card-body">
+                    <!-- Movie Title and Rating -->
+                    <div class="text-center mb-4">
+                        <h1 class="display-5 mb-3">{{ review.movie_title }}</h1>
+                        <div class="rating-stars mb-3">
+                            {% for i in "12345"|make_list %}
+                                {% if forloop.counter <= review.rating %}
+                                    <i class="fas fa-star fa-2x" style="color: var(--accent-gold);"></i>
+                                {% else %}
+                                    <i class="far fa-star fa-2x" style="color: var(--accent-gold);"></i>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        <h4 class="text-muted">{{ review.rating }}/5 Stars</h4>
+                    </div>
+
+                    <!-- Review Content -->
+                    <div class="review-content mb-4">
+                        <h5 class="mb-3"><i class="fas fa-comment"></i> Review</h5>
+                        <div class="review-text">
+                            {{ review.comment|linebreaks }}
+                        </div>
+                    </div>
+
+                    <!-- Movie Info Section -->
+                    {% if movie_info %}
+                    <div class="movie-info-section mb-4">
+                        <h5 class="mb-3"><i class="fas fa-film"></i> Movie Information</h5>
+                        <div class="row">
+                            {% if movie_info.Poster and movie_info.Poster != 'N/A' %}
+                            <div class="col-md-4 mb-3">
+                                <img src="{{ movie_info.Poster }}" alt="{{ review.movie_title }} poster"
+                                     class="img-fluid rounded shadow" style="max-height: 300px;">
+                            </div>
+                            {% endif %}
+                            <div class="col-md-8">
+                                <div class="movie-details">
+                                    {% if movie_info.Plot and movie_info.Plot != 'N/A' %}
+                                    <p><strong>Plot:</strong> {{ movie_info.Plot }}</p>
+                                    {% endif %}
+                                    {% if movie_info.Director and movie_info.Director != 'N/A' %}
+                                    <p><strong>Director:</strong> {{ movie_info.Director }}</p>
+                                    {% endif %}
+                                    {% if movie_info.Actors and movie_info.Actors != 'N/A' %}
+                                    <p><strong>Actors:</strong> {{ movie_info.Actors }}</p>
+                                    {% endif %}
+                                    {% if movie_info.Genre and movie_info.Genre != 'N/A' %}
+                                    <p><strong>Genre:</strong> {{ movie_info.Genre }}</p>
+                                    {% endif %}
+                                    {% if movie_info.Year and movie_info.Year != 'N/A' %}
+                                    <p><strong>Year:</strong> {{ movie_info.Year }}</p>
+                                    {% endif %}
+                                    {% if movie_info.imdbRating and movie_info.imdbRating != 'N/A' %}
+                                    <p><strong>IMDB Rating:</strong> {{ movie_info.imdbRating }}/10</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        {% if movie_info.imdbID %}
+                        <div class="text-center mt-3">
+                            <a href="https://www.imdb.com/title/{{ movie_info.imdbID }}/"
+                               target="_blank" class="btn btn-primary">
+                                <i class="fas fa-external-link-alt"></i> View on IMDB
+                            </a>
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+
+                    <!-- Review Metadata -->
+                    <div class="review-meta text-muted">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><i class="fas fa-calendar"></i> Reviewed on {{ review.created_at|date:"F j, Y" }}</p>
+                            </div>
+                            <div class="col-md-6 text-end">
+                                {% if review.user %}
+                                <p><i class="fas fa-user"></i> By {{ review.user.username }}</p>
+                                {% else %}
+                                <p><i class="fas fa-user-secret"></i> Anonymous Review</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="text-center mt-4">
+                <a href="{% url 'movie_search' %}" class="btn btn-primary me-2">
+                    <i class="fas fa-plus"></i> Write Another Review
+                </a>
+                <a href="{% url 'reviews_list' %}" class="btn btn-outline-secondary">
+                    <i class="fas fa-list"></i> View All Reviews
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

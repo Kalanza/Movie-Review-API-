@@ -61,23 +61,25 @@
             <div class="row">
                 {% for review in recent_reviews %}
                 <div class="col-md-6 col-lg-4 mb-4 animate-fade-in animate-delay-{{ forloop.counter|add:1 }}">
-                    <div class="card movie-card h-100">
-                        <div class="card-body">
-                            <h6 class="card-title">{{ review.movie_title }}</h6>
-                            <div class="rating-stars mb-2">
-                                {% for i in "12345"|make_list %}
-                                    {% if forloop.counter <= review.rating %}
-                                        <i class="fas fa-star"></i>
-                                    {% else %}
-                                        <i class="far fa-star"></i>
-                                    {% endif %}
-                                {% endfor %}
-                                <span class="ms-2 text-muted">{{ review.rating }}/5</span>
+                    <a href="{% url 'review_detail' review.pk %}" class="text-decoration-none">
+                        <div class="card movie-card h-100">
+                            <div class="card-body">
+                                <h6 class="card-title">{{ review.movie_title }}</h6>
+                                <div class="rating-stars mb-2">
+                                    {% for i in "12345"|make_list %}
+                                        {% if forloop.counter <= review.rating %}
+                                            <i class="fas fa-star"></i>
+                                        {% else %}
+                                            <i class="far fa-star"></i>
+                                        {% endif %}
+                                    {% endfor %}
+                                    <span class="ms-2 text-muted">{{ review.rating }}/5</span>
+                                </div>
+                                <p class="card-text">{{ review.comment|truncatewords:15 }}</p>
+                                <small class="text-muted">{{ review.created_at|date:"M d, Y" }}</small>
                             </div>
-                            <p class="card-text">{{ review.comment|truncatewords:15 }}</p>
-                            <small class="text-muted">{{ review.created_at|date:"M d, Y" }}</small>
                         </div>
-                    </div>
+                    </a>
                 </div>
                 {% endfor %}
             </div>

@@ -4,7 +4,7 @@ from .views import (
     UserViewSet, ReviewViewSet, RegisterView, UserProfileViewSet, 
     ReviewLikeViewSet, ReviewCommentViewSet, search_movies_view, 
     movie_details_view, movie_info_view, home_view, movie_search_view,
-    ReviewsListView, search_movies_public
+    ReviewsListView, search_movies_public, review_detail_view
 )
 
 router = DefaultRouter()
@@ -19,6 +19,7 @@ urlpatterns = [
     path('', home_view, name='home'),
     path('search/', movie_search_view, name='movie_search'),
     path('reviews/', ReviewsListView.as_view(), name='reviews_list'),
+    path('reviews/<int:pk>/', review_detail_view, name='review_detail'),
     
     # API URLs
     path('api/register/', RegisterView.as_view(), name='register'),

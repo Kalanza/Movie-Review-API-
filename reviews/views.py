@@ -225,6 +225,19 @@ class ReviewsListView(ListView):
     paginate_by = 12
     ordering = ['-created_date']
 
+def review_detail_view(request, pk):
+    """Individual review detail page"""
+    try:
+        review = Review.objects.get(pk=pk)
+        movie_info = fetch_movie_info(review.movie_title)
+        return render(request, 'reviews/review_detail.html', {
+            'review': review,
+            'movie_info': movie_info
+        })
+    except Review.DoesNotExist:
+        from django.http import Http404
+        raise Http404("Review not found")
+
 # API endpoint for the frontend search (without authentication)
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
