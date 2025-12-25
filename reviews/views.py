@@ -47,7 +47,7 @@ class UserProfileViewSet(viewsets.ModelViewSet):
 class ReviewLikeViewSet(viewsets.ModelViewSet):
     queryset = ReviewLike.objects.all()
     serializer_class = ReviewLikeSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get_queryset(self):
         if self.request.user.is_authenticated:
@@ -55,8 +55,9 @@ class ReviewLikeViewSet(viewsets.ModelViewSet):
         return ReviewLike.objects.none()
 
     def perform_create(self, serializer):
-        if self.request.user.is_authenticated:
-            serializer.save(user=self.request.user)
+        if not self.request.user.is_authenticated:
+            raise permissions.PermissionDenied("Authentication required to like a review.")
+        serializer.save(user=self.request.user)
 
 class ReviewCommentViewSet(viewsets.ModelViewSet):
     queryset = ReviewComment.objects.all()
@@ -64,6 +65,8 @@ class ReviewCommentViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly]
 
     def perform_create(self, serializer):
+        if not self.request.user.is_authenticated:
+            raise permissions.PermissionDenied("Authentication required to comment.")
         serializer.save(user=self.request.user)
 
 # Registration endpoint
