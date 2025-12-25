@@ -5,6 +5,7 @@ db.sqlite3-journal
 # Static files
 staticfiles/
 static/
+!reviews/static/
 
 # Media files
 media/

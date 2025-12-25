@@ -1,0 +1,434 @@
+/* ============================================
+   SIMPLE BLUE & WHITE THEME - Custom CSS
+   Movie Review API
+   ============================================ */
+
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Roboto:wght@400;500&display=swap');
+
+/* ============================================
+   CSS Variables - Simple Theme
+   ============================================ */
+:root {
+    /* Background Colors */
+    --bg-primary: #FFFFFF;
+    --bg-secondary: #F8F9FA;
+    --bg-card: #FFFFFF;
+    
+    /* Accent Colors */
+    --accent-blue: #007BFF;
+    --accent-blue-dark: #0056b3;
+    
+    /* Text Colors */
+    --text-primary: #212529;
+    --text-secondary: #6C757D;
+    --text-on-accent: #FFFFFF;
+    
+    /* Shadow & Border */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12);
+    --shadow-md: 0 3px 6px rgba(0, 0, 0, 0.16);
+    --border-subtle: 1px solid #DEE2E6;
+}
+
+/* ============================================
+   Global Styles
+   ============================================ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    min-height: 100vh;
+    line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    color: var(--accent-blue);
+    margin-bottom: 1rem;
+}
+
+h1 { font-size: 2.5rem; }
+h2 { font-size: 2rem; }
+h3 { font-size: 1.75rem; }
+
+a {
+    color: var(--accent-blue);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: var(--accent-blue-dark);
+    text-decoration: underline;
+}
+
+/* ============================================
+   Navigation Bar
+   ============================================ */
+.navbar {
+    background: var(--bg-primary);
+    border-bottom: var(--border-subtle);
+    padding: 1rem 0;
+    box-shadow: var(--shadow-sm);
+}
+
+.navbar-brand {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--accent-blue) !important;
+}
+
+.nav-link {
+    color: var(--text-secondary) !important;
+    font-weight: 500;
+    padding: 0.5rem 1rem !important;
+    transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+    color: var(--accent-blue) !important;
+}
+
+/* ============================================
+   Hero Section
+   ============================================ */
+.hero-section {
+    background-color: var(--bg-primary);
+    padding: 80px 0;
+    text-align: center;
+    border-bottom: var(--border-subtle);
+}
+
+.hero-section h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.hero-section .lead {
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+}
+
+/* ============================================
+   Buttons
+   ============================================ */
+.btn-primary {
+    background-color: var(--accent-blue);
+    border-color: var(--accent-blue);
+    border-radius: 0.25rem;
+    color: var(--text-on-accent);
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    padding: 10px 20px;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: var(--accent-blue-dark);
+    border-color: var(--accent-blue-dark);
+    color: var(--text-on-accent);
+}
+
+.btn-outline-primary {
+    border-color: var(--accent-blue);
+    color: var(--accent-blue);
+    transition: all 0.3s ease;
+}
+
+.btn-outline-primary:hover {
+    background: var(--accent-blue);
+    color: var(--text-on-accent);
+}
+
+.btn-secondary {
+    background: #6c757d;
+    border-color: #6c757d;
+    color: var(--text-on-accent);
+}
+
+.btn-secondary:hover {
+    background: #5a6268;
+    border-color: #545b62;
+}
+
+/* ============================================
+   Cards
+   ============================================ */
+.card {
+    background: var(--bg-card);
+    border: var(--border-subtle);
+    border-radius: 0.25rem;
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+}
+
+.card-header {
+    background: var(--bg-secondary);
+    border-bottom: var(--border-subtle);
+    padding: 1rem 1.25rem;
+}
+
+.card-header h4,
+.card-header h5 {
+    margin: 0;
+    color: var(--accent-blue);
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+.card-title {
+    color: var(--accent-blue);
+    font-size: 1.25rem;
+}
+
+.card-text {
+    color: var(--text-secondary);
+}
+
+.movie-card img {
+    transition: transform 0.3s ease;
+}
+
+.movie-card:hover img {
+    transform: scale(1.05);
+}
+
+/* ============================================
+   Skeleton Loader
+   ============================================ */
+.skeleton-loader {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+}
+
+.skeleton-card {
+    background: #e9ecef;
+    border: var(--border-subtle);
+    border-radius: 0.25rem;
+}
+
+.skeleton-image {
+    width: 100%;
+    height: 300px;
+    background: #e9ecef;
+    animation: pulse 1.5s infinite ease-in-out;
+}
+
+.skeleton-content {
+    padding: 1.5rem;
+}
+
+.skeleton-title, .skeleton-text {
+    background: #ced4da;
+    border-radius: 4px;
+    animation: pulse 1.5s infinite ease-in-out;
+}
+
+.skeleton-title {
+    width: 80%;
+    height: 24px;
+    margin-bottom: 1rem;
+}
+
+.skeleton-text {
+    width: 100%;
+    height: 16px;
+    margin-bottom: 0.5rem;
+}
+
+.skeleton-text:last-child {
+    width: 60%;
+}
+
+@keyframes pulse {
+    0% { background-color: #ced4da; }
+    50% { background-color: #e9ecef; }
+    100% { background-color: #ced4da; }
+}
+
+/* ============================================
+   Star Rating System
+   ============================================ */
+.star-rating {
+    display: inline-flex;
+    gap: 5px;
+    font-size: 1.5rem;
+}
+
+.star-rating i {
+    color: #ced4da;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.star-rating i.active,
+.star-rating i:hover {
+    color: #ffc107; /* Bootstrap yellow for stars */
+    transform: scale(1.1);
+}
+
+.star-rating i:hover ~ i {
+    color: #ced4da;
+}
+
+.rating-stars {
+    display: inline-flex;
+    gap: 3px;
+    color: #ffc107;
+}
+
+.rating-stars i {
+    font-size: 1rem;
+}
+
+/* ============================================
+   Form Elements
+   ============================================ */
+.form-control,
+.form-select {
+    background: var(--bg-primary);
+    border: var(--border-subtle);
+    border-radius: 0.25rem;
+    color: var(--text-primary);
+    padding: 10px 15px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+.form-label {
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+/* ============================================
+   Toast Notifications
+   ============================================ */
+.toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+}
+
+.custom-toast {
+    background: var(--bg-card);
+    border: var(--border-subtle);
+    border-radius: 0.25rem;
+    box-shadow: var(--shadow-md);
+    min-width: 300px;
+    animation: fadeIn 0.5s, fadeOut 0.5s 4.5s;
+}
+
+.toast-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    border-bottom: var(--border-subtle);
+}
+
+.toast-title {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.toast-close {
+    background: transparent;
+    border: none;
+    font-size: 1.25rem;
+    cursor: pointer;
+}
+
+.toast-body {
+    padding: 1rem;
+    color: var(--text-secondary);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+/* ============================================
+   Modal
+   ============================================ */
+.modal-content {
+    background: var(--bg-card);
+    border: var(--border-subtle);
+    border-radius: 0.3rem;
+}
+
+.modal-header {
+    border-bottom: var(--border-subtle);
+}
+
+.modal-title {
+    color: var(--accent-blue);
+}
+
+.modal-footer {
+    border-top: var(--border-subtle);
+    background: var(--bg-secondary);
+}
+
+/* ============================================
+   Footer
+   ============================================ */
+footer {
+    background: var(--bg-primary);
+    border-top: var(--border-subtle);
+    color: var(--text-secondary);
+    padding: 2rem 0;
+    margin-top: 4rem;
+    text-align: center;
+}
+
+/* ============================================
+   Scrollbar Styling
+   ============================================ */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+    background: #ced4da;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #adb5bd;
+}
