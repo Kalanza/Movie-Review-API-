@@ -20,6 +20,11 @@ X_FRAME_OPTIONS = 'DENY'
 STATIC_URL = '/static/'
 STATIC_ROOT = '/home/Kalanzaa/Movie-Review-API-/staticfiles'
 
+# Add static files directories
+STATICFILES_DIRS = [
+    '/home/Kalanzaa/Movie-Review-API-/static',
+]
+
 # Media files configuration
 MEDIA_URL = '/media/'
 MEDIA_ROOT = '/home/Kalanzaa/Movie-Review-API-/media'
