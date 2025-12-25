@@ -11,11 +11,12 @@ Class-based views
     1. Add an import:  from other_app.views import Home
     2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
 Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
+    1.  Import the include() function: from django.urls import include, path
+    2.  Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
 
+from django.views.generic import RedirectView
 from django.contrib import admin
 from django.urls import path, include, re_path
 from django.http import JsonResponse
@@ -50,6 +51,9 @@ def test_view(request):
     return JsonResponse({'message': 'Anonymous access works!', 'timestamp': str(timezone.now())})
 
 urlpatterns = [
+    # Redirect the default login URL to the swagger UI
+    path('accounts/login/', RedirectView.as_view(url='/swagger/', permanent=False)),
+
     # API Documentation (put these first to avoid conflicts)
     re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
