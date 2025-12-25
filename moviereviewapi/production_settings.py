@@ -32,8 +32,9 @@ DATABASES = {
     }
 }
 
-# Secret key from environment variable
-SECRET_KEY = config('SECRET_KEY', default=os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-!vm4=%#ukw=(p#ttxlrm-+(x1sx2n5izw4*84^0qyqp-2=ur$='))
+# Secret key from environment variable (REQUIRED - no fallback for security)
+SECRET_KEY = config('SECRET_KEY')
 
-# OMDB API Key from environment variable
-OMDB_API_KEY = config('OMDB_API_KEY', default=os.environ.get('OMDB_API_KEY', 'eb694b1d'))
+# OMDB API Key from environment variable (REQUIRED - no fallback for security)
+OMDB_API_KEY = config('OMDB_API_KEY')
+
