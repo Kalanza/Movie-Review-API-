@@ -36,10 +36,13 @@ class UserProfileViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.AllowAny]
 
     def get_queryset(self):
-        return UserProfile.objects.filter(user=self.request.user)
+        if self.request.user.is_authenticated:
+            return UserProfile.objects.filter(user=self.request.user)
+        return UserProfile.objects.none()
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        if self.request.user.is_authenticated:
+            serializer.save(user=self.request.user)
 
 class ReviewLikeViewSet(viewsets.ModelViewSet):
     queryset = ReviewLike.objects.all()
@@ -47,10 +50,13 @@ class ReviewLikeViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.AllowAny]
 
     def get_queryset(self):
-        return ReviewLike.objects.filter(user=self.request.user)
+        if self.request.user.is_authenticated:
+            return ReviewLike.objects.filter(user=self.request.user)
+        return ReviewLike.objects.none()
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        if self.request.user.is_authenticated:
+            serializer.save(user=self.request.user)
 
 class ReviewCommentViewSet(viewsets.ModelViewSet):
     queryset = ReviewComment.objects.all()
