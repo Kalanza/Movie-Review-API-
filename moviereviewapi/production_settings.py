@@ -18,7 +18,7 @@ X_FRAME_OPTIONS = 'DENY'
 
 # Static files configuration for PythonAnywhere
 STATIC_URL = '/static/'
-STATIC_ROOT = '/home/Kalanzaa/Movie-Review-API-/static'
+STATIC_ROOT = '/home/Kalanzaa/Movie-Review-API-/staticfiles'
 
 # Media files configuration
 MEDIA_URL = '/media/'
@@ -28,7 +28,7 @@ MEDIA_ROOT = '/home/Kalanzaa/Movie-Review-API-/media'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': '/home/Kalanzaa/Movie-Review-API-/db.sqlite3',
     }
 }
 
