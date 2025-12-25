@@ -5,15 +5,15 @@
 {% block content %}
 <div class="hero-section">
     <div class="container text-center">
-        <h1 class="display-4 mb-4 animate-fade-in">
+        <h1 class="display-4 mb-4">
             <i class="fas fa-film"></i> Movie Review API
         </h1>
-        <p class="lead animate-fade-in animate-delay-1">Discover, Review, and Rate Your Favorite Movies</p>
-        <div class="mt-4 animate-fade-in animate-delay-2">
+        <p class="lead">Discover, Review, and Rate Your Favorite Movies</p>
+        <div class="mt-4">
             <a href="{% url 'movie_search' %}" class="btn btn-primary btn-lg me-3">
-                <i class="fas fa-search"></i> Search Movies
+                <i class="fas fa-search"></i> Start Searching
             </a>
-            <a href="{% url 'reviews_list' %}" class="btn btn-outline-primary btn-lg" style="border-color: var(--accent-gold); color: var(--accent-gold);">
+            <a href="{% url 'reviews_list' %}" class="btn btn-outline-primary btn-lg">
                 <i class="fas fa-list"></i> View Reviews
             </a>
         </div>
@@ -22,30 +22,30 @@
 
 <div class="container my-5">
     <div class="row">
-        <div class="col-md-4 mb-4 animate-fade-in animate-delay-1">
+        <div class="col-md-4 mb-4 animate-fade-in">
             <div class="card h-100 text-center">
                 <div class="card-body">
-                    <i class="fas fa-search fa-3x text-warning mb-3" style="color: var(--accent-gold) !important;"></i>
+                    <i class="fas fa-search fa-3x mb-3" style="color: var(--accent-gold);"></i>
                     <h5 class="card-title">Search Movies</h5>
                     <p class="card-text">Find movies using our OMDB integration. Get detailed information about any movie.</p>
                     <a href="{% url 'movie_search' %}" class="btn btn-primary">Start Searching</a>
                 </div>
             </div>
         </div>
-        <div class="col-md-4 mb-4 animate-fade-in animate-delay-2">
+        <div class="col-md-4 mb-4 animate-fade-in animate-delay-1">
             <div class="card h-100 text-center">
                 <div class="card-body">
-                    <i class="fas fa-star fa-3x mb-3" style="color: var(--accent-red) !important;"></i>
+                    <i class="fas fa-star fa-3x mb-3" style="color: var(--accent-gold);"></i>
                     <h5 class="card-title">Write Reviews</h5>
                     <p class="card-text">Share your thoughts and rate movies. Help others discover great films.</p>
                     <a href="{% url 'reviews_list' %}" class="btn btn-primary">View Reviews</a>
                 </div>
             </div>
         </div>
-        <div class="col-md-4 mb-4 animate-fade-in animate-delay-3">
+        <div class="col-md-4 mb-4 animate-fade-in animate-delay-2">
             <div class="card h-100 text-center">
                 <div class="card-body">
-                    <i class="fas fa-code fa-3x mb-3" style="color: var(--accent-gold) !important;"></i>
+                    <i class="fas fa-code fa-3x mb-3" style="color: var(--accent-gold);"></i>
                     <h5 class="card-title">API Access</h5>
                     <p class="card-text">Use our RESTful API for your applications. Full documentation available.</p>
                     <a href="/swagger/" target="_blank" class="btn btn-primary">API Docs</a>

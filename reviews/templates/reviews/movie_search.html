@@ -27,9 +27,7 @@
 
     <div id="searchResults" class="mt-4"></div>
     <div id="loadingSpinner" class="text-center mt-4" style="display: none;">
-        <div class="spinner-border" role="status" style="color: var(--accent-gold);">
-            <span class="visually-hidden">Loading...</span>
-        </div>
+        <!-- Skeleton Loader will be injected here -->
     </div>
 </div>
 
@@ -49,14 +47,10 @@
                     
                     <div class="mb-3">
                         <label for="rating" class="form-label">Rating</label>
-                        <select class="form-select" id="rating" name="rating" required>
-                            <option value="">Select rating...</option>
-                            <option value="1">1 - Poor</option>
-                            <option value="2">2 - Fair</option>
-                            <option value="3">3 - Good</option>
-                            <option value="4">4 - Very Good</option>
-                            <option value="5">5 - Excellent</option>
-                        </select>
+                        <!-- Star Rating Component -->
+                        <div class="mb-2" data-star-rating data-input="rating"></div>
+                        <input type="hidden" id="rating" name="rating" required>
+                        <small class="text-muted">Click the stars to rate</small>
                     </div>
                     
                     <div class="mb-3">
@@ -84,8 +78,10 @@ $(document).ready(function() {
         const query = $('#searchQuery').val().trim();
         if (!query) return;
         
-        $('#loadingSpinner').show();
+        // Show skeleton loader
         $('#searchResults').empty();
+        const skeletonLoader = window.createSkeletonLoader(6);
+        $('#loadingSpinner').html('').append(skeletonLoader).show();
         
         $.ajax({
             url: '/api/search-movies/',
@@ -97,7 +93,7 @@ $(document).ready(function() {
             },
             error: function() {
                 $('#loadingSpinner').hide();
-                $('#searchResults').html('<div class="alert alert-danger">Error searching movies. Please try again.</div>');
+                window.toast.error('Error searching movies. Please try again.');
             }
         });
     });
@@ -112,7 +108,7 @@ $(document).ready(function() {
         let html = '<div class="row">';
         movies.forEach(movie => {
             html += `
-                <div class="col-md-6 col-lg-4 mb-4">
+                <div class="col-md-6 col-lg-4 mb-4 animate-fade-in">
                     <div class="card movie-card h-100">
                         <img src="${movie.Poster !== 'N/A' ? movie.Poster : '/static/placeholder.jpg'}" 
                              class="card-img-top" alt="${movie.Title}" style="height: 300px; object-fit: cover;">
@@ -146,27 +142,29 @@ $(document).ready(function() {
             $('#movieTitle').val(title);
             $('#movieImdbId').val(imdbId);
             $('#reviewModal .modal-title').text(`Write a Review for "${title}"`);
+            
+            // Reset form and star rating
+            $('#reviewForm')[0].reset();
+            $('#rating').val('');
+            const starRatingElement = document.querySelector('[data-star-rating]');
+            if (starRatingElement && starRatingElement.starRatingInstance) {
+                starRatingElement.starRatingInstance.setRating(0);
+            }
+            
             $('#reviewModal').modal('show');
         });
     }
     
     // Submit review
     $('#submitReview').click(function() {
-        console.log('Submit button clicked!'); // Debug log
-        
         const formData = {
             movie_title: $('#movieTitle').val(),
             review_content: $('#reviewContent').val(),
             rating: parseInt($('#rating').val())
         };
         
-        console.log('Form data collected:', formData); // Debug log
-        console.log('Movie title:', formData.movie_title);
-        console.log('Review content:', formData.review_content);
-        console.log('Rating:', formData.rating);
-        
         if (!formData.rating || !formData.review_content) {
-            alert('Please fill in all fields');
+            window.toast.warning('Please fill in all fields and select a rating');
             return;
         }
         
@@ -187,12 +185,11 @@ $(document).ready(function() {
         }
         
         const csrfToken = getCookie('csrftoken') || $('meta[name=csrf-token]').attr('content');
-        console.log('CSRF Token:', csrfToken); // Debug log
         
-        // Show loading state
-        const submitBtn = $('#submitReview');
-        const originalText = submitBtn.text();
-        submitBtn.text('Submitting...').prop('disabled', true);
+        // Show loading state with LoadingButton
+        const submitBtn = $('#submitReview')[0];
+        const loadingBtn = new window.LoadingButton(submitBtn);
+        loadingBtn.start('Submitting...');
         
         $.ajax({
             url: '/api/reviews/',
@@ -202,51 +199,36 @@ $(document).ready(function() {
                 'X-CSRFToken': csrfToken
             },
             data: JSON.stringify(formData),
-            beforeSend: function(xhr) {
-                console.log('About to send request to:', '/api/reviews/');
-                console.log('Request headers:', xhr.getAllResponseHeaders());
-                console.log('Request data:', JSON.stringify(formData));
-            },
             success: function(response) {
-                console.log('SUCCESS! Response:', response);
-                submitBtn.text(originalText).prop('disabled', false);
+                loadingBtn.stop();
                 $('#reviewModal').modal('hide');
                 $('#reviewForm')[0].reset();
-                alert('Review submitted successfully!');
-                // Optionally refresh the page or update the UI
-                location.reload();
+                window.toast.success('Review submitted successfully! 🎬');
+                
+                // Refresh page after a short delay
+                setTimeout(() => {
+                    location.reload();
+                }, 1500);
             },
             error: function(xhr, status, error) {
-                console.error('AJAX ERROR occurred:');
-                console.error('Status:', status);
-                console.error('Error:', error);
-                console.error('Response Status:', xhr.status);
-                console.error('Response Text:', xhr.responseText);
-                console.error('Ready State:', xhr.readyState);
-                
-                submitBtn.text(originalText).prop('disabled', false);
+                loadingBtn.stop();
                 
                 let errorMessage = 'Error submitting review. Please try again.';
                 
                 if (xhr.responseText) {
                     try {
                         const errorData = JSON.parse(xhr.responseText);
-                        console.error('Parsed error data:', errorData);
-                        
                         if (errorData.detail) {
                             errorMessage = errorData.detail;
                         } else if (errorData.message) {
                             errorMessage = errorData.message;
-                        } else if (typeof errorData === 'object') {
-                            errorMessage = JSON.stringify(errorData);
                         }
                     } catch (e) {
-                        console.error('Could not parse error response as JSON');
                         errorMessage = xhr.responseText;
                     }
                 }
                 
-                alert('Detailed Error: ' + errorMessage);
+                window.toast.error(errorMessage);
             }
         });
     });
