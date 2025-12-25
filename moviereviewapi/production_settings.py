@@ -3,6 +3,7 @@ Production settings for PythonAnywhere deployment
 """
 from .settings import *
 import os
+from decouple import config
 
 # Production settings
 DEBUG = False
@@ -32,7 +33,7 @@ DATABASES = {
 }
 
 # Secret key from environment variable
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-!vm4=%#ukw=(p#ttxlrm-+(x1sx2n5izw4*84^0qyqp-2=ur$=')
+SECRET_KEY = config('SECRET_KEY', default=os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-!vm4=%#ukw=(p#ttxlrm-+(x1sx2n5izw4*84^0qyqp-2=ur$='))
 
 # OMDB API Key from environment variable
-OMDB_API_KEY = os.environ.get('OMDB_API_KEY', 'eb694b1d')
+OMDB_API_KEY = config('OMDB_API_KEY', default=os.environ.get('OMDB_API_KEY', 'eb694b1d'))
